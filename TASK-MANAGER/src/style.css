@@ -1,0 +1,56 @@
+body {
+    font-family: Arial, sans-serif;
+    margin-top: 3px;
+    margin-bottom: 3px;
+    padding: 6px;
+    background-color: orange;
+}
+
+nav{
+    background: white;
+    padding: 10px;
+}
+
+nav a {
+    color: black;
+    margin-right: 15px;
+    text-decoration: none;
+}
+
+nav a:hover {
+    text-decoration: underline;
+}
+
+h1,h2 {
+    text-align: center;
+}
+
+.student-card{
+    background: white;
+    padding: 10px;
+    border-radius: 5px;
+    width: 250px;
+    margin: 10px auto;
+}
+
+form {
+    background: white;
+    padding: 15px;
+    max-width: 250px;
+    margin: auto;
+}
+
+input, button {
+    width: 100px;
+    padding: 8px;
+    margin: 10px 0;
+}
+
+button {
+    background: orange;
+    color: black;
+    border: none;
+}
+button:hover {
+    background: yellow;
+}
