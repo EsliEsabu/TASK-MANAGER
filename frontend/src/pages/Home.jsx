@@ -6,7 +6,7 @@ function Home() {
 
   return (
     <div style={{ textAlign: "center", marginTop: "50px" }}>
-      <h1>BIUST TASK-MANAGER APP</h1>
+      <h1>MOKWESO TASK-MANAGER APP</h1>
       <p>Organize your tasks efficiently.</p>
       {user ? (
         <Link to="/tasks" className="btn" style={{ width: "200px", marginTop: "20px" }}>

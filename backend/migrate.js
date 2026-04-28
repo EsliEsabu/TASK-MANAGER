@@ -1,43 +1,38 @@
 require('dotenv').config();
-const { connectDB, getDB } = require('../config/db');
+const { pool } = require('./config/db');
 
-const migrate = () => {
-  connectDB();
-  const db = getDB();
+const migrate = async () => {
+  try {
+    console.log('Starting migration...');
+    
+    await pool.query(`
+      CREATE TABLE IF NOT EXISTS users (
+        id SERIAL PRIMARY KEY,
+        name TEXT NOT NULL,
+        email TEXT NOT NULL UNIQUE,
+        password TEXT NOT NULL,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+      );
 
-  db.exec(`
-    CREATE TABLE IF NOT EXISTS Users (
-      id          INTEGER PRIMARY KEY AUTOINCREMENT,
-      username    TEXT NOT NULL UNIQUE,
-      email       TEXT NOT NULL UNIQUE,
-      password    TEXT NOT NULL,
-      created_at  TEXT DEFAULT (datetime('now')),
-      updated_at  TEXT DEFAULT (datetime('now'))
-    );
+      CREATE TABLE IF NOT EXISTS tasks (
+        id SERIAL PRIMARY KEY,
+        user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+        title TEXT NOT NULL,
+        description TEXT,
+        status TEXT DEFAULT 'pending',
+        priority TEXT DEFAULT 'medium',
+        due_date TEXT,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+      );
+    `);
 
-    CREATE TABLE IF NOT EXISTS Categories (
-      id          INTEGER PRIMARY KEY AUTOINCREMENT,
-      user_id     INTEGER NOT NULL REFERENCES Users(id) ON DELETE CASCADE,
-      name        TEXT NOT NULL,
-      color       TEXT DEFAULT '#6366f1',
-      created_at  TEXT DEFAULT (datetime('now'))
-    );
-
-    CREATE TABLE IF NOT EXISTS Todos (
-      id           INTEGER PRIMARY KEY AUTOINCREMENT,
-      user_id      INTEGER NOT NULL REFERENCES Users(id) ON DELETE CASCADE,
-      category_id  INTEGER REFERENCES Categories(id) ON DELETE SET NULL,
-      title        TEXT NOT NULL,
-      description  TEXT,
-      is_completed INTEGER DEFAULT 0,
-      priority     TEXT DEFAULT 'medium' CHECK (priority IN ('low','medium','high')),
-      due_date     TEXT,
-      created_at   TEXT DEFAULT (datetime('now')),
-      updated_at   TEXT DEFAULT (datetime('now'))
-    );
-  `);
-
-  console.log('✅ Migration complete — all tables created (or already exist).');
+    console.log('✅ Migration complete — all tables created (or already exist).');
+    process.exit(0);
+  } catch (err) {
+    console.error('❌ Migration failed:', err);
+    process.exit(1);
+  }
 };
 
 migrate();

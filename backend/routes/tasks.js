@@ -31,7 +31,7 @@ router.post('/', async (req, res, next) => {
     const { title, description, status, priority, due_date } = req.body;
     if (!title) return res.status(400).json({ error: 'Task title is required.' });
     const result = await run(
-      'INSERT INTO tasks (user_id, title, description, status, priority, due_date) VALUES (?, ?, ?, ?, ?, ?)',
+      'INSERT INTO tasks (user_id, title, description, status, priority, due_date) VALUES (?, ?, ?, ?, ?, ?) RETURNING id',
       [req.user.id, title, description || null, status || 'pending', priority || 'medium', due_date || null]
     );
     const task = await get('SELECT * FROM tasks WHERE id = ?', [result.lastInsertRowid]);
@@ -52,7 +52,7 @@ router.put('/:id', async (req, res, next) => {
       status = COALESCE(?, status), priority = COALESCE(?, priority),
       due_date = COALESCE(?, due_date), updated_at = CURRENT_TIMESTAMP
       WHERE id = ? AND user_id = ?`,
-      [title||null, description||null, status||null, priority||null, due_date||null, req.params.id, req.user.id]);
+      [title, description, status, priority, due_date, req.params.id, req.user.id]);
     const task = await get('SELECT * FROM tasks WHERE id = ?', [req.params.id]);
     res.json(task);
   } catch (err) { next(err); }

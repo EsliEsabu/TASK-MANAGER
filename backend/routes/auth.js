@@ -14,9 +14,9 @@ router.post('/register', async (req, res, next) => {
     if (existing) return res.status(409).json({ error: 'Email already registered.' });
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
-    const result = await run('INSERT INTO users (name, email, password) VALUES (?, ?, ?)', [name, email, hashedPassword]);
+    const result = await run('INSERT INTO users (name, email, password) VALUES (?, ?, ?) RETURNING id', [name, email, hashedPassword]);
     
-    // Fetch by lastInsertRowid, but fallback to email if necessary
+    // Fetch by lastInsertRowid
     let user = await get('SELECT id, name, email FROM users WHERE id = ?', [result.lastInsertRowid]);
     if (!user) {
       user = await get('SELECT id, name, email FROM users WHERE email = ?', [email]);

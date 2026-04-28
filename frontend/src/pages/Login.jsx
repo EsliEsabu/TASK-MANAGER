@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
+import { API_BASE_URL } from "../config";
 
 function Login() {
   const [formData, setFormData] = useState({
@@ -19,7 +20,7 @@ function Login() {
     e.preventDefault();
     setError("");
     try {
-      const response = await fetch("http://localhost:5000/api/auth/login", {
+      const response = await fetch(`${API_BASE_URL}/api/auth/login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -63,7 +64,7 @@ function Login() {
         />
         <button type="submit">Login</button>
       </form>
-      <p style={{ marginTop: "15px", textAlign: "center", color: "#666" }}>
+      <p style={{ marginTop: "15px", textAlign: "center", color: "grey" }}>
         Don't have an account? <Link to="/register" style={{ color: "blue" }}>Register</Link>
       </p>
     </div>

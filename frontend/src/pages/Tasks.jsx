@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import TaskCard from "../components/TaskCard";
+import { API_BASE_URL } from "../config";
 
 function Tasks() {
   const [tasks, setTasks] = useState([]);
@@ -10,7 +11,7 @@ function Tasks() {
     const fetchTasks = async () => {
       const token = localStorage.getItem("token");
       try {
-        const response = await fetch("http://localhost:5000/api/tasks", {
+        const response = await fetch(`${API_BASE_URL}/api/tasks`, {
           headers: {
             "Authorization": `Bearer ${token}`
           }
@@ -22,6 +23,7 @@ function Tasks() {
           setError("Failed to fetch tasks. Please ensure you are logged in.");
         }
       } catch (err) {
+        console.error("Error fetching tasks:", err);
         setError("Error connecting to server.");
       } finally {
         setLoading(false);
@@ -50,7 +52,7 @@ function Tasks() {
     const token = localStorage.getItem("token");
 
     try {
-      const response = await fetch(`http://localhost:5000/api/tasks/${taskId}`, {
+      const response = await fetch(`${API_BASE_URL}/api/tasks/${taskId}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
