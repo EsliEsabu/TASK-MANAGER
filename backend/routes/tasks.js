@@ -35,6 +35,9 @@ router.post('/', async (req, res, next) => {
       [req.user.id, title, description || null, status || 'pending', priority || 'medium', due_date || null]
     );
     const task = await get('SELECT * FROM tasks WHERE id = ?', [result.lastInsertRowid]);
+    if (!task) {
+      return res.status(500).json({ error: 'Task created but could not be retrieved.' });
+    }
     res.status(201).json(task);
   } catch (err) { next(err); }
 });

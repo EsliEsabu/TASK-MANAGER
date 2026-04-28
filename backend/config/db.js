@@ -50,9 +50,10 @@ const save = () => {
 const run = async (sql, params = []) => {
   const database = await getDb();
   database.run(sql, params);
+  const row = database.exec('SELECT last_insert_rowid()');
   save();
-  const row = database.exec('SELECT last_insert_rowid() as id');
-  return { lastInsertRowid: row[0]?.values[0][0] };
+  const lastId = row[0]?.values[0][0];
+  return { lastInsertRowid: lastId };
 };
 
 const get = async (sql, params = []) => {

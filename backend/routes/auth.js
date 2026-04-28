@@ -15,7 +15,17 @@ router.post('/register', async (req, res, next) => {
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
     const result = await run('INSERT INTO users (name, email, password) VALUES (?, ?, ?)', [name, email, hashedPassword]);
-    const user = await get('SELECT id, name, email FROM users WHERE id = ?', [result.lastInsertRowid]);
+    
+    // Fetch by lastInsertRowid, but fallback to email if necessary
+    let user = await get('SELECT id, name, email FROM users WHERE id = ?', [result.lastInsertRowid]);
+    if (!user) {
+      user = await get('SELECT id, name, email FROM users WHERE email = ?', [email]);
+    }
+    
+    if (!user) {
+      return res.status(500).json({ error: 'User created but could not be retrieved.' });
+    }
+
     const token = jwt.sign({ id: user.id, email: user.email }, process.env.JWT_SECRET, { expiresIn: '7d' });
     res.status(201).json({ token, user });
   } catch (err) { next(err); }
