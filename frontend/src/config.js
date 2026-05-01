@@ -1,1 +1,1 @@
-export const API_BASE_URL = import.meta.env.VITE_API_URL || "https://task-manager-57v0.onrender.com";
+export const API_BASE_URL = "https://task-manager-57v0.onrender.com";
