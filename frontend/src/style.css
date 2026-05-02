@@ -1,7 +1,7 @@
 .app-container {
   display: flex;
   min-height: 100vh;
-  background: linear-gradient(135deg, yellow, orange); /* blue-purple gradient */
+  background: linear-gradient(135deg, yellow, orange);
   color: beige;
 }
 
@@ -221,4 +221,73 @@
   color: #28a745;
   font-size: 20px;
   margin-left: 10px;
+}
+
+
+@media (max-width: 768px) {
+  .app-container {
+    flex-direction: column;
+  }
+
+  .sidebar {
+    width: 100%;
+    padding: 10px 20px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    box-sizing: border-box;
+  }
+
+  .sidebar h2 {
+    margin-bottom: 0;
+    font-size: 1.2em;
+  }
+
+  .sidebar ul {
+    display: flex;
+    flex-direction: row;
+    gap: 15px;
+    margin: 0;
+  }
+
+  .sidebar li {
+    margin: 0;
+    font-size: 0.9em;
+  }
+
+  .main-content {
+    padding: 20px;
+  }
+
+  .task-form {
+    width: 95%;
+    padding: 15px;
+  }
+
+  .task-list {
+    grid-template-columns: 1fr;
+  }
+
+  .tasks-page h1 {
+    font-size: 1.5em;
+  }
+
+  .section-title {
+    font-size: 1.2em;
+  }
+
+  .task-card {
+    padding: 15px;
+  }
+
+  .task-header {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .toggle-button {
+    width: 100%;
+    padding: 8px;
+  }
 }
